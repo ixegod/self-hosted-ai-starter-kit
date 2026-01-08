@@ -140,6 +140,24 @@ language model and Qdrant as your vector store.
 > combines robust components that work well together for proof-of-concept
 > projects. You can customize it to meet your specific needs
 
+### Exposing n8n with zrok
+
+This project includes a `zrok-tunnel` service to expose your local `n8n` instance to the internet. To use it, you'll need a `zrok` enable token.
+
+1. **Sign up for a free `zrok` account:** Go to the [zrok website](https://zrok.io/) and create an account.
+2. **Get your enable token:** After signing in, you'll find your enable token on the dashboard.
+3. **Add the token to your `.env` file:** Open your `.env` file and add the following line, replacing `<your-token>` with the token you just copied:
+   ```
+   ZROK_ENABLE_TOKEN=<your-token>
+   ```
+4. **Start the `zrok-tunnel` service:** When you start your docker compose environment, include the `zrok-tunnel` service:
+   ```bash
+   docker compose up --profile <your-profile> zrok-tunnel
+   ```
+   Replace `<your-profile>` with your usual profile (`cpu`, `gpu-nvidia`, or `gpu-amd`).
+
+Once the service starts, you'll see a public URL in the logs for the `zrok-tunnel` container. You can use this URL to access your `n8n` instance from anywhere.
+
 ## Upgrading
 
 * ### For Nvidia GPU setups:

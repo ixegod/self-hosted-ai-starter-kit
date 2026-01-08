@@ -159,3 +159,11 @@ services:
     image: ollama/ollama:rocm
     depends_on:
      - ollama-gpu-amd
+  zrok-tunnel:
+    image: openziti/zrok
+    profiles: ["zrok"]
+    networks: ['demo']
+    environment:
+      - ZROK_ENABLE_TOKEN=${ZROK_ENABLE_TOKEN}
+      - ZROK_TARGET=http://n8n:5678
+    command: share public --headless
