@@ -3,6 +3,7 @@ volumes:
   postgres_storage:
   ollama_storage:
   qdrant_storage:
+  zrok_storage:
 
 networks:
   demo:
@@ -117,6 +118,18 @@ services:
       - 6333:6333
     volumes:
       - qdrant_storage:/qdrant/storage
+
+  zrok-tunnel:
+    image: openziti/zrok
+    hostname: zrok-tunnel
+    container_name: zrok-tunnel
+    networks: ['demo']
+    restart: unless-stopped
+    environment:
+      - ZROK_ENABLE_TOKEN=${ZROK_ENABLE_TOKEN}
+      - ZROK_TARGET=n8n:5678
+    volumes:
+      - zrok_storage:/mnt/.zrok
 
   ollama-cpu:
     profiles: ["cpu"]
