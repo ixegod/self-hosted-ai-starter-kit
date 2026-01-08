@@ -37,16 +37,21 @@ x-ollama: &service-ollama
 x-init-ollama: &init-ollama
   image: ollama/ollama:latest
   networks: ['demo']
-  container_name: ollama-pull-llama
   volumes:
     - ollama_storage:/root/.ollama
+    - ./ollama_files:/root/ollama_files # <--- Aquí le pasamos el Modelfile
   entrypoint: /bin/sh
   environment:
     - OLLAMA_HOST=ollama:11434
   command:
     - "-c"
-    - "sleep 3; ollama pull llama3.2"
-
+    - |
+      sleep 5;
+      echo "--- Descargando Nomic Embed ---";
+      ollama pull nomic-embed-text;
+      echo "--- Creando GPT-OSS 20B (Esto puede tardar) ---";
+      ollama create gpt-oss:20b -f /root/ollama_files/Modelfile;
+      echo "--- ¡Listo! ---";
 services:
   postgres:
     image: postgres:16-alpine
